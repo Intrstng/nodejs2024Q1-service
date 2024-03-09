@@ -1,20 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
+import {IUser} from '../interfaces/interfaces';
 
-export class User {
+export class User implements IUser {
   @ApiProperty({ type: 'string', format: 'uuid', nullable: true })
-  id: string;
+  id;
 
   @ApiProperty()
-  login: string;
+  login;
 
-  password: string;
-
-  @ApiProperty()
-  version: number;
+  password;
 
   @ApiProperty()
-  createdAt: number;
+  version;
 
   @ApiProperty()
-  updatedAt: number;
+  createdAt;
+
+  @ApiProperty()
+  updatedAt;
 }

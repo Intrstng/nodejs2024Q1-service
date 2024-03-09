@@ -1,6 +1,17 @@
-import {BadRequestException, Controller, Get, NotFoundException, Param, ParseUUIDPipe} from '@nestjs/common';
+import {
+  BadRequestException, Body,
+  Controller,
+  Get,
+  HttpCode,
+  NotFoundException,
+  Param,
+  ParseUUIDPipe,
+  Post
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import {validate} from 'uuid';
+import {CreateUserDto} from './dto/create-user.dto';
+
 
 @Controller('user')
 export class UserController {
@@ -19,5 +30,12 @@ export class UserController {
       throw new NotFoundException(`User with id ${id} not found`);
     }
     return user;
+  }
+
+  @Post()
+  @HttpCode(201)
+    createUser(@Body() dto: CreateUserDto) {
+      if (!(dto.login && dto.password)) throw new BadRequestException('Request body does not contain required fields');
+      return this.userService.createUser(dto);
   }
 }
