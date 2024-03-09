@@ -1,18 +1,18 @@
 import {
-  BadRequestException, Body,
+  BadRequestException,
+  Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
-  NotFoundException,
   Param,
   ParseUUIDPipe,
-  Post, Put
+  Post,
+  Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import {validate} from 'uuid';
-import {CreateUserDto} from './dto/create-user.dto';
-import {UpdatePasswordDto} from './dto/update-user.dto';
-
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdatePasswordDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -30,22 +30,32 @@ export class UserController {
 
   @Post()
   @HttpCode(201)
-    createUser(@Body() dto: CreateUserDto) {
-      if (!(dto.login && dto.password)) {
-        throw new BadRequestException('Request body does not contain required fields');
-      }
-      return this.userService.createUser(dto);
+  createUser(@Body() dto: CreateUserDto) {
+    if (!(dto.login && dto.password)) {
+      throw new BadRequestException(
+        'Request body does not contain required fields',
+      );
+    }
+    return this.userService.createUser(dto);
   }
 
   @Put(':id')
   @HttpCode(200)
   updateUsersPasswordById(
-      @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-      @Body() dto: UpdatePasswordDto
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body() dto: UpdatePasswordDto,
   ) {
     if (!(dto.oldPassword && dto.newPassword)) {
-      throw new BadRequestException('Request body does not contain required fields');
+      throw new BadRequestException(
+        'Request body does not contain required fields',
+      );
     }
     return this.userService.updateUsersPasswordById(id, dto);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  deleteUserById(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    return this.userService.deleteUserById(id);
   }
 }

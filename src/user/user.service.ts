@@ -1,10 +1,10 @@
-import {ForbiddenException, Injectable, NotFoundException} from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../db/db.service';
 import { IUser } from '../interfaces/interfaces';
-import {CreateUserDto} from './dto/create-user.dto';
-import {User} from '../entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from '../entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
-import {UpdatePasswordDto} from './dto/update-user.dto';
+import { UpdatePasswordDto } from './dto/update-user.dto';
 
 function slicePasswordFromResponseObject(obj: IUser): IUser {
   const { password, ...rest } = obj;
@@ -15,15 +15,15 @@ function slicePasswordFromResponseObject(obj: IUser): IUser {
 export class UserService {
   constructor(private readonly db: DatabaseService) {}
   findAll(): IUser[] {
-    return this.db.users.map(u => slicePasswordFromResponseObject(u));
+    return this.db.users.map((u) => slicePasswordFromResponseObject(u));
   }
 
   findUserById(id: string): IUser {
-    const user = this.db.users.find(u => u.id === id);
+    const user = this.db.users.find((u) => u.id === id);
     if (user) {
       return slicePasswordFromResponseObject(user);
     } else {
-      throw new NotFoundException(`User with id ${id} not found`);
+      throw new NotFoundException(`User record with id ${id} not found`);
     }
   }
 
@@ -39,12 +39,12 @@ export class UserService {
     return slicePasswordFromResponseObject(newUser);
   }
 
-  updateUsersPasswordById(id: string, dto: UpdatePasswordDto): IUser | undefined {
-    let user = this.db.users.find(u => u.id === id);
+  updateUsersPasswordById(id: string, dto: UpdatePasswordDto): IUser {
+    const user = this.db.users.find((u) => u.id === id);
     if (user) {
       if (user.password !== dto.oldPassword) {
         throw new ForbiddenException(
-            `Old password is wrong for user with id ${id}`,
+          `Old password is wrong for user with id ${id}`,
         );
       }
       user.password = dto.newPassword;
@@ -54,5 +54,13 @@ export class UserService {
     } else {
       throw new NotFoundException(`User record with id ${id} not found`);
     }
+  }
+
+  deleteUserById(id: string): void {
+    const idxUser = this.db.users.findIndex((u) => u.id === id);
+    if (idxUser === -1) {
+      throw new NotFoundException(`User record with id ${id} not found`);
+    }
+    this.db.users.splice(idxUser, 1);
   }
 }
