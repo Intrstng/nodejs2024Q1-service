@@ -1,4 +1,15 @@
-import { BadRequestException, Body, Controller, Get, HttpCode, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
@@ -35,11 +46,25 @@ export class TrackController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() dto: UpdateTrackDto,
   ) {
-    if (!(dto?.name && dto?.duration && dto?.artistId && dto?.albumId)) {
+    if (
+      (!dto?.name && !dto?.duration && !dto?.artistId && !dto?.albumId) ||
+      (dto?.name && typeof dto?.name !== 'string') ||
+      (dto?.duration && typeof dto?.duration !== 'number') ||
+      (dto?.artistId && typeof dto?.artistId !== 'string') ||
+      (dto?.albumId && typeof dto?.albumId !== 'string')
+    ) {
       throw new BadRequestException(
         'Request body does not contain required fields',
       );
     }
-    this.trackService.updateTrackById(id, dto);
+    return this.trackService.updateTrackById(id, dto);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  deleteTrackById(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    this.trackService.deleteTrackById(id);
   }
 }

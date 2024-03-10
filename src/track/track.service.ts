@@ -29,20 +29,23 @@ export class TrackService {
     return newTrack;
   }
 
-  updateTrackById(id: string, dto: UpdateTrackDto) {
+  updateTrackById(id: string, dto: UpdateTrackDto): ITrack {
     const track = this.db.tracks.find((t) => t.id === id);
-    if (track) {
-      track.name = dto.name;
-      track.albumId = dto.albumId;
-      track.artistId = dto.artistId;
-      track.duration = dto.duration;
-    } else {
+    if (!track) {
       throw new NotFoundException(`Track record with id ${id} not found`);
     }
+    track.name = dto.name;
+    track.albumId = dto.albumId;
+    track.artistId = dto.artistId;
+    track.duration = dto.duration;
     return track;
   }
 
-  deleteTrackById() {
-    return {};
+  deleteTrackById(id: string): void {
+    const idxTrack = this.db.tracks.findIndex((t) => t.id === id);
+    if (idxTrack === -1) {
+      throw new NotFoundException(`Track record with id ${id} not found`);
+    }
+    this.db.tracks.splice(idxTrack, 1);
   }
 }
