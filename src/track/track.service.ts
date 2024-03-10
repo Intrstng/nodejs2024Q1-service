@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../db/db.service';
 import { ITrack } from '../interfaces/interfaces';
+import { CreateTrackDto } from './dto/create-track.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class TrackService {
@@ -17,8 +19,13 @@ export class TrackService {
     } else return track;
   }
 
-  createTrack() {
-    return {};
+  createTrack(dto: CreateTrackDto): ITrack {
+    const newTrack: ITrack = {
+      id: uuidv4(),
+      ...dto,
+    };
+    this.db.tracks.push(newTrack);
+    return newTrack;
   }
 
   updateTrackById() {
