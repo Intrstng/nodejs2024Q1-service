@@ -1,5 +1,5 @@
 export interface IUser {
-  id: string; // uuid v4
+  id?: string; // uuid v4
   login: string;
   password?: string;
   version: number;
@@ -22,7 +22,7 @@ export interface ITrack {
 }
 
 export interface IAlbum {
-  id: string;
+  id?: string;
   name: string;
   year: number;
   artistId: string | null;

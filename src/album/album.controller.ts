@@ -1,5 +1,14 @@
-import { Controller, Get, HttpCode, Param, ParseUUIDPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  HttpCode,
+  Param,
+  ParseUUIDPipe,
+  Body, BadRequestException,
+} from '@nestjs/common';
 import { AlbumService } from './album.service';
+import { CreateAlbumDto } from './dto/create-album.dto';
 
 @Controller('album')
 export class AlbumController {
@@ -14,6 +23,19 @@ export class AlbumController {
   @Get(':id')
   @HttpCode(200)
   findAlbumById(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    this.albumService.findAlbumById(id);
+    return this.albumService.findAlbumById(id);
+  }
+
+  @Post()
+  @HttpCode(201)
+  createAlbum(@Body() dto: CreateAlbumDto) {
+    if (!dto || typeof dto.name !== 'string' || typeof dto.year !== 'number') {
+      throw new BadRequestException('invalid dto');
+    }
+
+    if (typeof dto.artistId !== 'string' && dto.artistId !== null) {
+      throw new BadRequestException('invalid dto');
+    }
+    return this.albumService.createAlbum(dto);
   }
 }
