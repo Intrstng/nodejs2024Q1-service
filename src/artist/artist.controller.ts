@@ -1,5 +1,7 @@
-import { Controller, Get, HttpCode, Param, ParseUUIDPipe } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpCode, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { ArtistService } from './artist.service';
+import { CreateArtistDto } from './dto/create-artist.dto';
+import { CreateUserDto } from '../user/dto/create-user.dto';
 
 @Controller('artist')
 export class ArtistController {
@@ -15,5 +17,16 @@ export class ArtistController {
   @HttpCode(200)
   getArtistById(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return this.artistService.findArtistById(id);
+  }
+
+  @Post()
+  @HttpCode(201)
+  createArtist(@Body() dto: CreateArtistDto) {
+    if (!(dto?.name && dto?.grammy)) {
+      throw new BadRequestException(
+        'Request body does not contain required fields',
+      );
+    }
+    return this.artistService.createArtist(dto);
   }
 }
