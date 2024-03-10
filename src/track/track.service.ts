@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../db/db.service';
 import { ITrack } from '../interfaces/interfaces';
 
@@ -10,8 +10,11 @@ export class TrackService {
     return this.db.tracks;
   }
 
-  findTrackById(id: string) {
-    return {};
+  findTrackById(id: string): ITrack {
+    const track = this.db.tracks.find((t) => t.id === id);
+    if (!track) {
+      throw new NotFoundException(`Track record with id ${id} not found`);
+    } else return track;
   }
 
   createTrack() {
