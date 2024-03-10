@@ -1,27 +1,27 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../db/db.service';
-import { ITrack } from '../interfaces/interfaces';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateTrackDto } from './dto/update-track.dto';
+import { Track } from '../entities/track.entity';
 
 @Injectable()
 export class TrackService {
   constructor(private readonly db: DatabaseService) {}
 
-  findAll(): ITrack[] {
+  findAll(): Track[] {
     return this.db.tracks;
   }
 
-  findTrackById(id: string): ITrack {
+  findTrackById(id: string): Track {
     const track = this.db.tracks.find((t) => t.id === id);
     if (!track) {
       throw new NotFoundException(`Track record with id ${id} not found`);
     } else return track;
   }
 
-  createTrack(dto: CreateTrackDto): ITrack {
-    const newTrack: ITrack = {
+  createTrack(dto: CreateTrackDto): Track {
+    const newTrack: Track = {
       id: uuidv4(),
       ...dto,
     };
@@ -29,7 +29,7 @@ export class TrackService {
     return newTrack;
   }
 
-  updateTrackById(id: string, dto: UpdateTrackDto): ITrack {
+  updateTrackById(id: string, dto: UpdateTrackDto): Track {
     const track = this.db.tracks.find((t) => t.id === id);
     if (!track) {
       throw new NotFoundException(`Track record with id ${id} not found`);
@@ -47,5 +47,12 @@ export class TrackService {
       throw new NotFoundException(`Track record with id ${id} not found`);
     }
     this.db.tracks.splice(idxTrack, 1);
+
+    const idxFavoriteTrack = this.db.favorites.tracks.findIndex(
+      (t) => t.id === id,
+    );
+    if (idxFavoriteTrack !== -1) {
+      this.db.favorites.tracks.splice(idxFavoriteTrack, 1);
+    }
   }
 }
