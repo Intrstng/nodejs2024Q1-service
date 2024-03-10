@@ -13,7 +13,7 @@ export class ArtistService {
     return this.db.artists;
   }
 
-  getArtistById(id: string) {
+  findArtistById(id: string): Artist {
     const artist = this.db.artists.find((a) => a.id === id);
     if (!artist) {
       throw new NotFoundException(`Artist record with id ${id} not found`);

@@ -23,39 +23,39 @@ const createArtistDto = {
 const randomUUID = '0a35dd62-e09f-444b-a628-f4e7c6954f57';
 
 describe('Album (e2e)', () => {
-  // const unauthorizedRequest = request;
-  // const commonHeaders = { Accept: 'application/json' };
-  // let mockUserId: string | undefined;
-  //
-  // beforeAll(async () => {
-  //   if (shouldAuthorizationBeTested) {
-  //     const result = await getTokenAndUserId(unauthorizedRequest);
-  //     commonHeaders['Authorization'] = result.token;
-  //     mockUserId = result.mockUserId;
-  //   }
-  // });
-  //
-  // afterAll(async () => {
-  //   // delete mock user
-  //   if (mockUserId) {
-  //     await removeTokenUser(unauthorizedRequest, mockUserId, commonHeaders);
-  //   }
-  //
-  //   if (commonHeaders['Authorization']) {
-  //     delete commonHeaders['Authorization'];
-  //   }
-  // });
-  //
-  // describe('GET', () => {
-  //   it('should correctly get all albums', async () => {
-  //     const response = await unauthorizedRequest
-  //       .get(albumsRoutes.getAll)
-  //       .set(commonHeaders);
-  //
-  //     expect(response.status).toBe(StatusCodes.OK);
-  //     expect(response.body).toBeInstanceOf(Array);
-  //   });
-  //
+  const unauthorizedRequest = request;
+  const commonHeaders = { Accept: 'application/json' };
+  let mockUserId: string | undefined;
+
+  beforeAll(async () => {
+    if (shouldAuthorizationBeTested) {
+      const result = await getTokenAndUserId(unauthorizedRequest);
+      commonHeaders['Authorization'] = result.token;
+      mockUserId = result.mockUserId;
+    }
+  });
+
+  afterAll(async () => {
+    // delete mock user
+    if (mockUserId) {
+      await removeTokenUser(unauthorizedRequest, mockUserId, commonHeaders);
+    }
+
+    if (commonHeaders['Authorization']) {
+      delete commonHeaders['Authorization'];
+    }
+  });
+
+  describe('GET', () => {
+    it('should correctly get all albums', async () => {
+      const response = await unauthorizedRequest
+        .get(albumsRoutes.getAll)
+        .set(commonHeaders);
+
+      expect(response.status).toBe(StatusCodes.OK);
+      expect(response.body).toBeInstanceOf(Array);
+    });
+
   //   it('should correctly get album by id', async () => {
   //     const creationResponse = await unauthorizedRequest
   //       .post(albumsRoutes.create)
@@ -321,5 +321,5 @@ describe('Album (e2e)', () => {
   //     const { albumId } = searchTrackResponse.body;
   //     expect(albumId).toBe(null);
   //   });
-  // });
+  });
 });

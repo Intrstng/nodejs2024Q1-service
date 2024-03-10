@@ -26,8 +26,8 @@ export class ArtistController {
 
   @Get(':id')
   @HttpCode(200)
-  getArtistById(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    return this.artistService.getArtistById(id);
+  findArtistById(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    return this.artistService.findArtistById(id);
   }
 
   @Post()
