@@ -3,6 +3,7 @@ import { DatabaseService } from '../db/db.service';
 import { ITrack } from '../interfaces/interfaces';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { UpdateTrackDto } from './dto/update-track.dto';
 
 @Injectable()
 export class TrackService {
@@ -28,8 +29,17 @@ export class TrackService {
     return newTrack;
   }
 
-  updateTrackById() {
-    return {};
+  updateTrackById(id: string, dto: UpdateTrackDto) {
+    const track = this.db.tracks.find((t) => t.id === id);
+    if (track) {
+      track.name = dto.name;
+      track.albumId = dto.albumId;
+      track.artistId = dto.artistId;
+      track.duration = dto.duration;
+    } else {
+      throw new NotFoundException(`Track record with id ${id} not found`);
+    }
+    return track;
   }
 
   deleteTrackById() {
