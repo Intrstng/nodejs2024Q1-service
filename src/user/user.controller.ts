@@ -24,6 +24,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @HttpCode(200)
   findUserById(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return this.userService.findUserById(id);
   }

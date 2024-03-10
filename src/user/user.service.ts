@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { DatabaseService } from '../db/db.service';
 import { IUser } from '../interfaces/interfaces';
 import { CreateUserDto } from './dto/create-user.dto';
