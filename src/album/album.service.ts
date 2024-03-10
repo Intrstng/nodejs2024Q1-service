@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../db/db.service';
 import { Album } from '../entities/album.entity';
 import { v4 as uuidv4 } from 'uuid';
+import { UpdateAlbumDto } from './dto/update-album.dto';
 
 @Injectable()
 export class AlbumService {
@@ -28,8 +29,15 @@ export class AlbumService {
     return newAlbum;
   }
 
-  updateAlbumById(id: string, dto: any): any {
-    return {};
+  updateAlbumById(id: string, dto: UpdateAlbumDto): Album {
+    const album = this.db.albums.find((a) => a.id === id);
+    if (!album) {
+      throw new NotFoundException(`Album record with id ${id} not found`);
+    }
+    album.name = dto.name;
+    album.year = dto.year;
+    album.artistId = dto.artistId;
+    return album;
   }
 
   deleteAlbumById(id: string): any {
