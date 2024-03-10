@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Put,
+  Delete,
   HttpCode,
   Param,
   ParseUUIDPipe,
@@ -32,13 +33,12 @@ export class AlbumController {
   @Post()
   @HttpCode(201)
   createAlbum(@Body() dto: CreateAlbumDto) {
-    if (!dto || typeof dto.name !== 'string' || typeof dto.year !== 'number') {
-      throw new BadRequestException(
-        'Request body does not contain required fields',
-      );
-    }
-
-    if (typeof dto.artistId !== 'string' && dto.artistId !== null) {
+    if (
+      !dto ||
+      typeof dto.name !== 'string' ||
+      typeof dto.year !== 'number' ||
+      (typeof dto.artistId !== 'string' && dto.artistId !== null)
+    ) {
       throw new BadRequestException(
         'Request body does not contain required fields',
       );
@@ -63,5 +63,13 @@ export class AlbumController {
       );
     }
     return this.albumService.updateAlbumById(id, dto);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  deleteAlbumById(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    return this.albumService.deleteAlbumById(id);
   }
 }

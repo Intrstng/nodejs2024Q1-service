@@ -40,7 +40,16 @@ export class AlbumService {
     return album;
   }
 
-  deleteAlbumById(id: string): any {
-    return {};
+  deleteAlbumById(id: string): void {
+    const idxAlbum = this.db.albums.findIndex((a) => a.id === id);
+    if (idxAlbum === -1) {
+      throw new NotFoundException(`Album record with id ${id} not found`);
+    }
+    this.db.albums.splice(idxAlbum, 1);
+
+    this.db.tracks.forEach((t) => {
+      t.albumId === id && (t.albumId = null);
+    });
+    this.db.favorites.albums = this.db.albums.filter((a) => a.id !== id);
   }
 }
