@@ -7,7 +7,7 @@ import { AlbumService } from '../album/album.service';
 import { TrackService } from '../track/track.service';
 import { ArtistService } from '../artist/artist.service';
 import { DatabaseService } from '../db/db.service';
-import { ITrack } from '../interfaces/interfaces';
+import { IAlbum, ITrack } from '../interfaces/interfaces';
 
 @Injectable()
 export class FavoritesService {
@@ -43,5 +43,16 @@ export class FavoritesService {
       );
     }
     this.db.favorites.tracks.splice(idxFavoriteTrack, 1);
+  }
+
+  addAlbum(id: string): IAlbum {
+    const album = this.albumService.findAlbumById(id);
+    if (!album) {
+      throw new UnprocessableEntityException(
+        `Album record with id ${id} doesn't exist`,
+      );
+    }
+    this.db.favorites.albums.push(album);
+    return album;
   }
 }
