@@ -55,4 +55,14 @@ export class FavoritesService {
     this.db.favorites.albums.push(album);
     return album;
   }
+
+  deleteAlbum(id: string) {
+    const idxAlbum = this.db.favorites.albums.findIndex((a) => a.id === id);
+    if (idxAlbum === -1) {
+      throw new NotFoundException(
+        `Album record with id ${id} is not in favorites`,
+      );
+    }
+    this.db.favorites.albums.splice(idxAlbum, 1);
+  }
 }
