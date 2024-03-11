@@ -25,14 +25,17 @@ export class FavoritesService {
   }
 
   addTrack(id: string): Track {
-    const track = this.trackService.findTrackById(id);
-    if (!track) {
-      throw new UnprocessableEntityException({
-        message: `Track record with id ${id} doesn't exist`,
-      });
+    const index = this.db.tracks.findIndex((track) => track.id === id);
+    if (index === -1) {
+      throw new UnprocessableEntityException(
+        `Track record with id ${id} doesn't exist`,
+      );
     }
-    this.db.favorites.tracks.push(track);
-    return track;
+    const track = this.trackService.findTrackById(id);
+    if (track) {
+      this.db.favorites.tracks.push(track);
+      return track;
+    }
   }
 
   deleteTrack(id: string): void {
@@ -48,14 +51,17 @@ export class FavoritesService {
   }
 
   addAlbum(id: string): Album {
-    const album = this.albumService.findAlbumById(id);
-    if (!album) {
+    const index = this.db.albums.findIndex((album) => album.id === id);
+    if (index === -1) {
       throw new UnprocessableEntityException(
         `Album record with id ${id} doesn't exist`,
       );
     }
-    this.db.favorites.albums.push(album);
-    return album;
+    const album = this.albumService.findAlbumById(id);
+    if (album) {
+      this.db.favorites.albums.push(album);
+      return album;
+    }
   }
 
   deleteAlbum(id: string): void {
@@ -69,14 +75,17 @@ export class FavoritesService {
   }
 
   addArtist(id: string): Artist {
-    const artist = this.artistService.findArtistById(id);
-    if (!artist) {
-      throw new UnprocessableEntityException({
-        message: `Artist record with id ${id} doesn't exist`,
-      });
+    const index = this.db.artists.findIndex((artist) => artist.id === id);
+    if (index === -1) {
+      throw new UnprocessableEntityException(
+        `Artist record with id ${id} doesn't exist`,
+      );
     }
-    this.db.favorites.artists.push(artist);
-    return artist;
+    const artist = this.artistService.findArtistById(id);
+    if (artist) {
+      this.db.favorites.artists.push(artist);
+      return artist;
+    }
   }
 
   deleteArtist(id: string): void {
