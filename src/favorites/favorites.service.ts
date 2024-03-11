@@ -1,4 +1,8 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { AlbumService } from '../album/album.service';
 import { TrackService } from '../track/track.service';
 import { ArtistService } from '../artist/artist.service';
@@ -27,5 +31,17 @@ export class FavoritesService {
     }
     this.db.favorites.tracks.push(track);
     return track;
+  }
+
+  deleteTrack(id: string): void {
+    const idxFavoriteTrack = this.db.favorites.tracks.findIndex(
+      (t) => t.id === id,
+    );
+    if (idxFavoriteTrack === -1) {
+      throw new NotFoundException(
+        `Track record with id ${id} is not in favorites`,
+      );
+    }
+    this.db.favorites.tracks.splice(idxFavoriteTrack, 1);
   }
 }
