@@ -47,7 +47,7 @@ export class TrackService {
       throw new NotFoundException(`Track record with id ${id} not found`);
     }
     this.db.tracks.splice(idxTrack, 1);
-
+    // Favorites
     const idxFavoriteTrack = this.db.favorites.tracks.findIndex(
       (t) => t.id === id,
     );

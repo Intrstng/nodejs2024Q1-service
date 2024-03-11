@@ -50,6 +50,12 @@ export class AlbumService {
     this.db.tracks.forEach((t) => {
       t.albumId === id && (t.albumId = null);
     });
-    this.db.favorites.albums = this.db.albums.filter((a) => a.id !== id);
+    // Favorites
+    const idxFavoriteAlbum = this.db.favorites.albums.findIndex(
+      (a) => a.id === id,
+    );
+    if (idxFavoriteAlbum !== -1) {
+      this.db.favorites.albums.splice(idxFavoriteAlbum, 1);
+    }
   }
 }

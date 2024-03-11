@@ -52,5 +52,12 @@ export class ArtistService {
     this.db.tracks.forEach((t) => {
       t.artistId === id && (t.artistId = null);
     });
+    // Favorites
+    const idxFavoriteArtist = this.db.favorites.artists.findIndex(
+      (a) => a.id === id,
+    );
+    if (idxFavoriteArtist !== -1) {
+      this.db.favorites.artists.splice(idxFavoriteArtist, 1);
+    }
   }
 }
