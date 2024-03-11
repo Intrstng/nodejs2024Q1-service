@@ -78,4 +78,14 @@ export class FavoritesService {
     this.db.favorites.artists.push(artist);
     return artist;
   }
+
+  deleteArtist(id: string): void {
+    const idxArtist = this.db.favorites.artists.findIndex((a) => a.id === id);
+    if (idxArtist === -1) {
+      throw new NotFoundException(
+        `Artist record with id ${id} is not in favorites`,
+      );
+    }
+    this.db.favorites.artists.splice(idxArtist, 1);
+  }
 }
