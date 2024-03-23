@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DatabaseService } from '../db/db.service';
+import { DatabaseService } from '../database/db.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateTrackDto } from './dto/update-track.dto';

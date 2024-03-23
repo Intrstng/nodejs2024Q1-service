@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DatabaseService } from '../db/db.service';
+import { DatabaseService } from '../database/db.service';
 import { Album } from '../entities/album.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateAlbumDto } from './dto/update-album.dto';
