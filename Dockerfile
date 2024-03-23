@@ -9,6 +9,7 @@ COPY --from=builder /app/node_modules/ node_modules
 COPY doc doc
 COPY package*.json ./
 COPY tsconfig*.json ./
+COPY jest*.json ./
 COPY nest-cli.json ./
 COPY prisma prisma
 COPY src src
