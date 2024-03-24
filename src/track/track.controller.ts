@@ -65,6 +65,6 @@ export class TrackController {
   deleteTrackById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
   ) {
-    this.trackService.deleteTrackById(id);
+    return this.trackService.deleteTrackById(id);
   }
 }
