@@ -3,7 +3,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { DatabaseService } from '../database/db.service';
 import { IUser } from '../interfaces/interfaces';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '../entities/user.entity';
