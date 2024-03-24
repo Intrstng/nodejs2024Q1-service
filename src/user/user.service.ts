@@ -9,6 +9,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '../entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdatePasswordDto } from './dto/update-user.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 function slicePasswordFromResponseObject(obj: IUser): IUser {
   const { password, ...rest } = obj;
@@ -17,13 +18,14 @@ function slicePasswordFromResponseObject(obj: IUser): IUser {
 
 @Injectable()
 export class UserService {
-  constructor(private readonly db: DatabaseService) {}
-  findAll(): IUser[] {
-    return this.db.users.map((u) => slicePasswordFromResponseObject(u));
+  constructor(private readonly prisma: PrismaService) {}
+  async findAll(): Promise<IUser[]> {
+    const users = await this.prisma.user.findMany();
+    return users.map((u) => slicePasswordFromResponseObject(u));
   }
 
-  findUserById(id: string): IUser {
-    const user = this.db.users.find((u) => u.id === id);
+  async findUserById(id: string): Promise<IUser> {
+    const user = await this.prisma.user.findFirst({ where: { id: id } })
     if (user) {
       return slicePasswordFromResponseObject(user);
     } else {
@@ -31,7 +33,7 @@ export class UserService {
     }
   }
 
-  createUser(dto: CreateUserDto): IUser {
+  async createUser(dto: CreateUserDto): Promise<IUser> {
     const newUser: User = {
       ...dto,
       id: uuidv4(),
@@ -39,12 +41,14 @@ export class UserService {
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
-    this.db.users.push(newUser);
-    return slicePasswordFromResponseObject(newUser);
+    const user = await this.prisma.user.create({
+      data: newUser,
+    });
+    return slicePasswordFromResponseObject(user);
   }
 
-  updateUsersPasswordById(id: string, dto: UpdatePasswordDto): IUser {
-    const user = this.db.users.find((u) => u.id === id);
+  async updateUsersPasswordById(id: string, dto: UpdatePasswordDto): Promise<IUser> {
+    const user = await this.prisma.user.findFirst({ where: { id: id } });
     if (user) {
       if (user.password !== dto.oldPassword) {
         throw new ForbiddenException(
@@ -54,17 +58,27 @@ export class UserService {
       user.password = dto.newPassword;
       user.version += 1;
       user.updatedAt = Date.now();
-      return slicePasswordFromResponseObject(user);
+      const updatedUser = await this.prisma.user.update({
+        where: {
+          id: id,
+        },
+        data: user,
+      });
+      return slicePasswordFromResponseObject(updatedUser); // user
     } else {
       throw new NotFoundException(`User record with id ${id} not found`);
     }
   }
 
-  deleteUserById(id: string): void {
-    const idxUser = this.db.users.findIndex((u) => u.id === id);
-    if (idxUser === -1) {
+  async deleteUserById(id: string) {
+    const idxUser = await this.prisma.user.findFirst({ where: { id: id } });
+    if (!idxUser) {
       throw new NotFoundException(`User record with id ${id} not found`);
     }
-    this.db.users.splice(idxUser, 1);
+    return await this.prisma.user.delete({
+      where: {
+        id: id,
+      },
+    });
   }
 }
