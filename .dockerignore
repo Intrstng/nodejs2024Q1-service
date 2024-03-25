@@ -1,0 +1,15 @@
+node_modules
+dist
+.git
+.gitignore
+.idea
+.vscode
+.eslintrc.js
+.prettierrc
+.dockerignore
+.docker-compose.yml
+.docker-compose.hub.yml
+Dockerfile
+coverage
+src/database
+test
