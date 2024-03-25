@@ -75,6 +75,15 @@ Custom images are stored in Docker Hub (make search by names):
 - andreibabich/home_library_service-app
 - andreibabich/home_library_service-db
 
+
+Sometimes search in Docker Hub doesn\`t work for public repo\`s. To find and pull my containers from Docker Hub use these direct links
+```
+https://hub.docker.com/r/andreibabich/home_library_service-app
+```
+```
+https://hub.docker.com/r/andreibabich/home_library_service-db
+```
+
 ### Pull the images from Docker Hub
 
 Run in terminal:
