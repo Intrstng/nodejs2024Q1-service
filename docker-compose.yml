@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: andreibabich/home_library_service-app
     restart: always
     ports:
       - ${PORT}:${PORT}
@@ -25,7 +26,7 @@ services:
   postgres:
     container_name: postgres_db
     build: ./src/database
-    image: postgres:16.2-alpine3.19
+    image: andreibabich/home_library_service-db
     restart: always
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}

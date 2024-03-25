@@ -24,7 +24,7 @@ export class UserService {
   }
 
   async findUserById(id: string): Promise<IUser> {
-    const user = await this.prisma.user.findFirst({ where: { id: id } })
+    const user = await this.prisma.user.findFirst({ where: { id: id } });
     if (user) {
       return slicePasswordFromResponseObject(user);
     } else {
@@ -46,7 +46,10 @@ export class UserService {
     return slicePasswordFromResponseObject(user);
   }
 
-  async updateUsersPasswordById(id: string, dto: UpdatePasswordDto): Promise<IUser> {
+  async updateUsersPasswordById(
+    id: string,
+    dto: UpdatePasswordDto,
+  ): Promise<IUser> {
     const user = await this.prisma.user.findFirst({ where: { id: id } });
     if (user) {
       if (user.password !== dto.oldPassword) {

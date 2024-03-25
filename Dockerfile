@@ -1,8 +1,9 @@
+# Build stage
 FROM node:21-alpine3.18 as builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --omit=dev
-
+# Final stage
 FROM node:21-alpine3.18 as runner
 WORKDIR /app
 COPY --from=builder /app/node_modules/ node_modules
@@ -13,5 +14,10 @@ COPY jest*.json ./
 COPY nest-cli.json ./
 COPY prisma prisma
 COPY src src
-EXPOSE 4000
+
+# Cleanup
+RUN npm cache clean --force \
+    && rm -rf /tmp/* \
+
+EXPOSE ${PORT}
 CMD npx prisma migrate dev && npm run start:dev

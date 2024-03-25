@@ -24,7 +24,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "docker:build": "docker-compose -f docker-compose.yml up -d --build",
-    "docker:pull": "docker-compose -f docker-compose.hub.yml up -d"
+    "docker:pull": "docker-compose -f docker-compose.hub.yml up -d",
+    "docker:down": "docker-compose down",
+    "docker:clean": "docker-compose down && docker system prune -af && docker volume rm data logs",
+    "docker:scan": "docker scout recommendations andreibabich/home_library_service-app && docker scout recommendations andreibabich/home_library_service-db",
+    "docker:scan-cves": "docker scout cves andreibabich/home_library_service-app && docker scout cves andreibabich/home_library_service-db"
   },
   "dependencies": {
     "@nestjs/cli": "^10.3.2",

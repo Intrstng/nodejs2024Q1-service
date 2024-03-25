@@ -49,7 +49,7 @@ export class TrackService {
   }
 
   async deleteTrackById(id: string) {
-    const track = await this.prisma.track.findFirst({ where: { id: id } })
+    const track = await this.prisma.track.findFirst({ where: { id: id } });
     if (!track) {
       throw new NotFoundException(`Track record with id ${id} not found`);
     }
