@@ -35,7 +35,10 @@ npm install --force
 ```
 
 ## Create env file (.env is moved to .gitignore)
+```
 Create .env file (**based on .env.example**)
+```
+OR YOU CAN JUST RENAME `.env.example` to `.env`
 
 ## Docker
 
