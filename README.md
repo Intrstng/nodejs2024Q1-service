@@ -11,6 +11,11 @@
 git clone https://github.com/Intrstng/nodejs2024Q1-service.git
 ```
 
+## Go to the application root folder (run in terminal from the original folder where the repo was cloned):
+```
+cd nodejs2024Q1-service
+```
+
 ## Switch to task branch:
 
 ```
