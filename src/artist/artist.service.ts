@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,8 +8,10 @@ import { Artist } from '../entities/artist.entity';
 @Injectable()
 export class ArtistService {
   constructor(private prisma: PrismaService) {}
+  private readonly logger = new Logger(ArtistService.name);
 
   async findAll(): Promise<Artist[]> {
+    this.logger.log('getting all artists');
     return await this.prisma.artist.findMany();
   }
 

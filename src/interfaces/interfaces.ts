@@ -49,3 +49,22 @@ export interface IFavoritesResponse {
   albums: IAlbum[];
   tracks: ITrack[];
 }
+
+export interface ISignupDto {
+  login: string;
+  password: string;
+}
+
+export interface ILoginDto {
+  login: string;
+  password: string;
+}
+
+export interface IRefreshDto {
+  refreshToken: string;
+}
+
+export interface ITokensObject {
+  accessToken: string;
+  refreshToken: string;
+}

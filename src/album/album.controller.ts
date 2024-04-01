@@ -13,24 +13,28 @@ import {
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('album')
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
 
   @Get()
+  @ApiBearerAuth()
   @HttpCode(200)
   findAll() {
     return this.albumService.findAll();
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @HttpCode(200)
   findAlbumById(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return this.albumService.findAlbumById(id);
   }
 
   @Post()
+  @ApiBearerAuth()
   @HttpCode(201)
   createAlbum(@Body() dto: CreateAlbumDto) {
     if (
@@ -47,6 +51,7 @@ export class AlbumController {
   }
 
   @Put(':id')
+  @ApiBearerAuth()
   @HttpCode(200)
   updateAlbumById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
@@ -66,6 +71,7 @@ export class AlbumController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   @HttpCode(204)
   deleteAlbumById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,

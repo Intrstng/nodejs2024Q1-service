@@ -13,23 +13,27 @@ import {
 import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('track')
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
   @Get()
+  @ApiBearerAuth()
   findAll() {
     return this.trackService.findAll();
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @HttpCode(200)
   findTrackById(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return this.trackService.findTrackById(id);
   }
 
   @Post()
+  @ApiBearerAuth()
   @HttpCode(201)
   createTrack(@Body() dto: CreateTrackDto) {
     if (!(dto?.name && dto?.duration)) {
@@ -41,6 +45,7 @@ export class TrackController {
   }
 
   @Put(':id')
+  @ApiBearerAuth()
   @HttpCode(200)
   updateTrackById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
@@ -61,6 +66,7 @@ export class TrackController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   @HttpCode(204)
   deleteTrackById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -9,6 +10,9 @@ import { User } from '../entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdatePasswordDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
+
+export const roundsOfHashing = 10;
 
 function slicePasswordFromResponseObject(obj: IUser): IUser {
   const { password, ...rest } = obj;
@@ -33,12 +37,15 @@ export class UserService {
   }
 
   async createUser(dto: CreateUserDto): Promise<IUser> {
+    const passHashed = await bcrypt.hash(dto.password, roundsOfHashing);
+    const timestamp = Number(Date.now());
     const newUser: User = {
       ...dto,
       id: uuidv4(),
       version: 1,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      password: passHashed,
     };
     const user = await this.prisma.user.create({
       data: newUser,
@@ -46,18 +53,12 @@ export class UserService {
     return slicePasswordFromResponseObject(user);
   }
 
-  async updateUsersPasswordById(
-    id: string,
-    dto: UpdatePasswordDto,
-  ): Promise<IUser> {
+  async updateUsersPasswordById( id: string, dto: UpdatePasswordDto ): Promise<IUser> {
     const user = await this.prisma.user.findFirst({ where: { id: id } });
     if (user) {
-      if (user.password !== dto.oldPassword) {
-        throw new ForbiddenException(
-          `Old password is wrong for user with id ${id}`,
-        );
-      }
-      user.password = dto.newPassword;
+      const passwordIsValid = await bcrypt.compare(dto.oldPassword, user.password);
+      if (!passwordIsValid) throw new ForbiddenException('Entered password is wrong');
+      user.password = await bcrypt.hash(dto.newPassword, roundsOfHashing);
       user.version += 1;
       user.updatedAt = Date.now();
       const updatedUser = await this.prisma.user.update({
@@ -66,7 +67,7 @@ export class UserService {
         },
         data: user,
       });
-      return slicePasswordFromResponseObject(updatedUser); // user
+      return slicePasswordFromResponseObject(updatedUser);
     } else {
       throw new NotFoundException(`User record with id ${id} not found`);
     }
