@@ -1,10 +1,10 @@
 # Build stage
-FROM node:21-alpine3.18 as builder
+FROM node:21 as builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --omit=dev
 # Final stage
-FROM node:21-alpine3.18 as runner
+FROM node:21 as runner
 WORKDIR /app
 COPY --from=builder /app/node_modules/ node_modules
 COPY doc doc

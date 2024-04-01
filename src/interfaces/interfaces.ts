@@ -5,6 +5,7 @@ export interface IUser {
   version: number;
   createdAt: number;
   updatedAt: number;
+  refreshToken?: string;
 }
 
 export interface IArtist {
@@ -48,4 +49,23 @@ export interface IFavoritesResponse {
   artists: IArtist[];
   albums: IAlbum[];
   tracks: ITrack[];
+}
+
+export interface ISignupDto {
+  login: string;
+  password: string;
+}
+
+export interface ILoginDto {
+  login: string;
+  password: string;
+}
+
+export interface IRefreshDto {
+  refreshToken: string;
+}
+
+export interface ITokensObject {
+  accessToken: string;
+  refreshToken: string;
 }

@@ -28,7 +28,9 @@
     "docker:down": "docker-compose down",
     "docker:clean": "docker-compose down && docker system prune -af && docker volume rm data logs",
     "docker:scan": "docker scout recommendations andreibabich/home_library_service-app && docker scout recommendations andreibabich/home_library_service-db",
-    "docker:scan-cves": "docker scout cves andreibabich/home_library_service-app && docker scout cves andreibabich/home_library_service-db"
+    "docker:scan-cves": "docker scout cves andreibabich/home_library_service-app && docker scout cves andreibabich/home_library_service-db",
+    "test:docker": "docker exec -it app npm run test",
+    "test:install": "docker exec -it app npm install"
   },
   "dependencies": {
     "@nestjs/cli": "^10.3.2",
@@ -81,6 +83,7 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "^3.10.1",
-    "typescript": "^4.3.5"
+    "typescript": "^4.3.5",
+    "yaml-to-json": "^0.3.0"
   }
 }
