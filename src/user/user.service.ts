@@ -36,6 +36,18 @@ export class UserService {
     }
   }
 
+  public async findUserByLogin(login: string) {
+    if (login) {
+      if (!(await this.prisma.user.findFirst({ where: { login: login } })))
+        throw new NotFoundException(`User record with login ${login} not found`);
+      return await this.prisma.user.findFirst({
+        where: {
+          login: login,
+        },
+      });
+    } else throw new BadRequestException('Entered login is invalid!');
+  }
+
   async createUser(dto: CreateUserDto): Promise<IUser> {
     const passHashed = await bcrypt.hash(dto.password, roundsOfHashing);
     const timestamp = Number(Date.now());
@@ -83,5 +95,20 @@ export class UserService {
         id: id,
       },
     });
+  }
+
+  async updateRefreshTokenById(id: string, refreshToken: string) {
+    try {
+      // @ts-ignore
+      await this.prisma.user.update({
+        where: { id: id },
+        data: {
+          refreshToken: refreshToken,
+        },
+      });
+      return true;
+    } catch (err) {
+      return false;
+    }
   }
 }
