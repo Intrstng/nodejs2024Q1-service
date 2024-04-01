@@ -19,7 +19,7 @@ cd nodejs2024Q1-service
 ## Switch to task branch:
 
 ```
-git checkout task_part2
+git checkout task_part3
 ```
 
 ## Installing NPM modules
@@ -35,9 +35,9 @@ npm install --force
 ```
 
 ## Create env file (.env is moved to .gitignore)
-```
-Create .env file (**based on .env.example**)
-```
+
+Create `.env` file (**based** on `.env.example`)
+
 OR YOU CAN JUST RENAME `.env.example` to `.env`
 
 ## Docker
@@ -59,9 +59,9 @@ npm run docker:build
 4. Start tests
 
 ## Tests
-If you completed installing of the dependencies, pulling or building the images, and containers are started (docker log of started container is ok), open new terminal and run:
+If you completed installing of the dependencies, pulling or building the images, and containers are started (docker log of started container is ok), open **NEW** terminal and run:
 ```
-npm run test
+npm run test:auth
 ```
 
 ## Stop running container
@@ -75,66 +75,4 @@ npm run docker:down
 To stop running container and delete ALL volumes and images in your system:
 ```
 npm run docker:clean
-```
-
-## Docker Hub
-
-Custom images are stored in Docker Hub (make search by names):
-- andreibabich/home_library_service-app
-- andreibabich/home_library_service-db
-
-
-Sometimes search in Docker Hub doesn\`t work for public repo\`s. To find and pull my containers from Docker Hub use these direct links
-```
-https://hub.docker.com/r/andreibabich/home_library_service-app
-```
-```
-https://hub.docker.com/r/andreibabich/home_library_service-db
-```
-
-### Pull the images from Docker Hub
-
-Run in terminal:
-```
-docker pull andreibabich/home_library_service-app
-```
-```
-docker pull andreibabich/home_library_service-db
-```
-
-Start the containers by running:
-
-```
-npm run docker:pull
-```
-
-Open root folder of the app and start in terminal:
-
-```
-npm run test
-```
-
-
-## Vulnerabilities scan
-!!! You must be logged in to Docker Hub !!!
-Start scripts:
-
-Run docker scout cves:
-```
-npm run docker:scan
-```
-
-Show docker scout recommendations:
-```
-npm run docker:scan-cves
-```
-
-### Auto-fix and format
-
-```
-npm run lint
-```
-
-```
-npm run format
 ```
