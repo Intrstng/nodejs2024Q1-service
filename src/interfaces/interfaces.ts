@@ -1,51 +1,70 @@
-export interface User {
-  id: string; // uuid v4
+export interface IUser {
+  id?: string; // uuid v4
   login: string;
-  password: string;
+  password?: string;
   version: number;
   createdAt: number;
   updatedAt: number;
 }
 
-export interface Artist {
-  id: string;
+export interface IArtist {
+  id?: string;
   name: string;
   grammy: boolean;
 }
 
-export interface Track {
-  id: string;
+export interface ITrack {
+  id?: string;
   name: string;
   artistId: string | null;
   albumId: string | null;
   duration: number;
 }
 
-export interface Album {
-  id: string;
+export interface IAlbum {
+  id?: string;
   name: string;
   year: number;
   artistId: string | null;
 }
 
-export interface Favorites {
+export interface IFavorites {
   artists: string[];
   albums: string[];
   tracks: string[];
 }
 
-export interface CreateUserDto {
+export interface ICreateUserDto {
   login: string;
   password: string;
 }
 
-export interface UpdatePasswordDto {
+export interface IUpdatePasswordDto {
   oldPassword: string;
   newPassword: string;
 }
 
-export interface FavoritesResponse {
-  artists: Artist[];
-  albums: Album[];
-  tracks: Track[];
+export interface IFavoritesResponse {
+  artists: IArtist[];
+  albums: IAlbum[];
+  tracks: ITrack[];
+}
+
+export interface ISignupDto {
+  login: string;
+  password: string;
+}
+
+export interface ILoginDto {
+  login: string;
+  password: string;
+}
+
+export interface IRefreshDto {
+  refreshToken: string;
+}
+
+export interface ITokensObject {
+  accessToken: string;
+  refreshToken: string;
 }

@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  app:
+    container_name: app
+    image: andreibabich/home_library_service-app
+    restart: always
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - postgres
+    volumes:
+      - ./src:/app/src
+    env_file:
+      - .env
+    networks:
+      - ${NETWORK}
+
+  postgres:
+    container_name: postgres_db
+    image: andreibabich/home_library_service-db
+    restart: always
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    env_file:
+      - .env
+    volumes:
+      - /var/lib/postgresql/data
+    networks:
+      - ${NETWORK}
+
+networks:
+  library-service:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${NETWORK_SUBNET}
+          ip_range: ${NETWORK_IP_RANGE}
+          gateway: ${NETWORK_GATEWAY}
+    name: ${NETWORK}
+
+volumes:
+  app:
+  postgres:
