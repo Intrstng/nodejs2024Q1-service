@@ -6,12 +6,19 @@ import { dirname, join } from 'path';
 import { OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { parse } from 'yaml';
+// import { Logger } from './log/log.service';
 
 const PORT = parseInt(process.env.PORT || '4000');
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bodyParser: true,
+    rawBody: true,
+    bufferLogs: true,
+  });
   app.useGlobalPipes(new ValidationPipe());
+  // app.useLogger(app.get(Logger));
+
   const api = await readFile(
     join(dirname(__dirname), 'doc', 'api.yaml'),
     'utf-8',

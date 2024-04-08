@@ -18,4 +18,7 @@ export class User implements IUser {
 
   @ApiProperty()
   updatedAt;
+
+  @ApiProperty()
+  refreshToken?;
 }
